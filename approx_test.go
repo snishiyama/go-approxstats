@@ -53,12 +53,13 @@ func TestQuantile(t *testing.T) {
 		expected float64
 		errMsg   string
 	}{
-		{"N(0,1),Pr=0.9,eps=1e-2", Cdf(norm.Prob, math.Inf(-1), 300), 0.9, -10, 10, 1e-2, norm.Quantile(0.9), ""},
-		{"N(0,1),Pr=0.2,eps=1e-6", Cdf(norm.Prob, math.Inf(-1), 300), 0.2, -10, 10, 1e-6, norm.Quantile(0.2), ""},
-		{"N(0,1),Pr=0.3,eps=1e-10", norm.CDF, 0.3, -10, 10, 1e-10, norm.Quantile(0.3), ""},
-		{"Gam(1,1),Pr=0.3,eps=1e-6", Cdf(gam.Prob, 0, 300), 0.3, 0, 10, 1e-6, gam.Quantile(0.3), ""},
-		{"F(5,2),Pr=0.3,eps=1e-6", Cdf(f.Prob, 0, 300), 0.3, 0, 1, 1e-6, f.Quantile(0.3), ""},
-		{"Out_of_range", norm.CDF, 0.9, .001, 1, 1e-6, .001, `Value of interest is outside of the range [a, b].`},
+		{"N(0,1),Pr=0.9,eps=1e-2,numerical", Cdf(norm.Prob, math.Inf(-1), 300), 0.9, -10, 10, 1e-2, norm.Quantile(0.9), ""},
+		{"N(0,1),Pr=0.2,eps=1e-6,numerical", Cdf(norm.Prob, math.Inf(-1), 300), 0.2, -10, 10, 1e-6, norm.Quantile(0.2), ""},
+		{"N(0,1),Pr=0.3,eps=1e-15,formal", norm.CDF, 0.3, -10, 10, 1e-15, norm.Quantile(0.3), ""},
+		{"Gam(1,1),Pr=0.3,eps=1e-14,numerical", Cdf(gam.Prob, 0, 300), 0.3, 0, 10, 1e-14, gam.Quantile(0.3), ""},
+		{"F(5,2),Pr=0.3,eps=1e-11,formal", f.CDF, 0.3, 0, 1, 1e-14, f.Quantile(0.3), ""},
+		{"F(5,2),Pr=0.3,eps=1e-11,numerical", Cdf(f.Prob, 0, 300), 0.3, 0, 1, 1e-11, f.Quantile(0.3), ""},
+		{"Out_of_range", norm.CDF, 0.9, .001, 1, 1e-6, .001, `Value of interest is outside of the range [a, b).`},
 	}
 
 	for _, d := range data {
